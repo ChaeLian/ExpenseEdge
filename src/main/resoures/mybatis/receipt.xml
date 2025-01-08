@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="receipt">
+	
+ 	<insert id="receiptAdd">
+ 		INSERT INTO RECEIPT(
+ 			ATTACH_ID
+ 			,ATTACH_ORG_NAME
+ 			,ATTACH_NEW_NAME
+ 			,IF_DEL
+ 		) VALUES(
+ 			'receipt_'||LPAD(RECEIPT_SEQ.NEXTVAL, 5, '0')
+ 			,#{attachOrgName}
+ 			,#{attachNewName}
+ 			,'N'
+ 		)
+ 		<!-- RETURNING INTO 구문 사용을 위한 selectKey -->
+	    <selectKey keyProperty="attachId" resultType="java.lang.String" order="AFTER">
+        	SELECT 'receipt_'||LPAD(RECEIPT_SEQ.CURRVAL, 5, '0') AS ATTACH_ID FROM DUAL
+	    </selectKey>
+ 	</insert>
+ 	
+ 	<select id="receiptSelect">
+ 		SELECT * FROM RECEIPT
+		WHERE ATTACH_ID = #{attachId} AND IF_DEL = 'N';
+ 	</select>
+ 	
+ 	<update id="attachDel">
+ 		UPDATE RECEIPT SET IF_DEL = 'Y'
+		WHERE ATTACH_ID = #{attachId}
+ 	</update>
+  	
+</mapper>

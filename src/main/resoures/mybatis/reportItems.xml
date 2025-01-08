@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="reportItems">
+	
+ 	<insert id="reportItemsAdd">
+ 		INSERT INTO REPORTITEMS(
+ 			ITEM_ID
+ 			,COST_ID
+ 			,REPORT_ID
+ 			,ITEM_DESC
+ 			,RESULT_AMOUNT
+ 			,AMOUNT
+ 			,ADD_AT
+ 			,ATTACH_ID
+ 			,ITEM_DATE
+ 			,IF_DEL
+ 		) VALUES(
+ 			'item_'||LPAD(ITEM_SEQ.NEXTVAL, 5, '0')
+ 			,#{costId}
+ 			,#{reportId}
+ 			,#{itemDesc}
+ 			,#{resultAmount}
+ 			,#{amount}
+ 			,SYSDATE
+ 			,#{attachId}
+ 			,#{itemDate}
+ 			,'N'	
+ 		)
+ 	</insert>
+ 	
+ 	<select id="itemList" resultMap="reportItemResultMap">
+ 		SELECT DISTINCT I.*
+				,C.COST_ID AS COST_ID_C
+				,C.COST_NAME
+				,C.MAX_AMOUNT
+				,C.CATEGORY_ID
+				,C.CATEGORY_NAME
+				,R.ATTACH_ID AS ATTACH_ID_R
+				,R.ATTACH_ORG_NAME
+				,R.ATTACH_NEW_NAME
+		FROM REPORTITEMS I 
+			JOIN (SELECT COST.*, CATEGORY.CATEGORY_NAME FROM COST JOIN CATEGORY ON COST.CATEGORY_ID = CATEGORY.CATEGORY_ID) C ON I.COST_ID = C.COST_ID
+			JOIN RECEIPT R ON R.ATTACH_ID = I.ATTACH_ID
+			WHERE I.REPORT_ID = #{reportId} AND I.IF_DEL = 'N'
+ 	</select>
+ 	
+ 	<resultMap id="reportItemResultMap" type="me.ExpenseEdge.ReportItems.reportItemsDTO.ReportItemsDTO">
+	    <!-- ReportItemsVo 객체 매핑 -->
+	    <association property="reportItemsVo" javaType="me.ExpenseEdge.ReportItems.ReportItemsVo">
+	        <id property="itemId" column="ITEM_ID"/>
+	        <result property="costId" column="COST_ID"/>
+	        <result property="reportId" column="REPORT_ID"/>
+	        <result property="itemDesc" column="ITEM_DESC"/>
+	        <result property="resultAmount" column="RESULT_AMOUNT"/>
+	        <result property="amount" column="AMOUNT"/>
+	        <result property="addAt" column="ADD_AT"/>
+	        <result property="updateAt" column="UPDATE_AT"/>
+	        <result property="attachId" column="ATTACH_ID"/>
+	        <result property="itemDate" column="ITEM_DATE"/>
+	        <result property="ifDel" column="IF_DEL"/>
+	    </association>
+	    
+	    <!-- CostVo 객체 매핑 -->
+	    <association property="costVo" javaType="me.ExpenseEdge.Cost.CostVo">
+	    	<id property="costId" column="COST_ID_C"/>
+	        <result property="costName" column="COST_NAME"/>
+	        <result property="maxAmount" column="MAX_AMOUNT"/>
+	        <result property="categoryId" column="CATEGORY_ID"/>
+	        <result property="categoryName" column="CATEGORY_NAME"/>
+	    </association>
+	
+	    <!-- ReceiptVo 객체 매핑 -->
+	    <association property="receiptVo" javaType="me.ExpenseEdge.Receipt.ReceiptVo">
+	    	<id property="attachId" column="ATTACH_ID_R"/>
+	        <result property="attachOrgName" column="ATTACH_ORG_NAME"/>
+	        <result property="attachNewName" column="ATTACH_NEW_NAME"/>
+	    </association>
+    </resultMap>
+    
+    <update id="itemDel">
+    	UPDATE REPORTITEMS SET IF_DEL = 'Y' 
+    	WHERE ITEM_ID = #{itemId}
+    </update>
+    
+    <select id="itemSelect" resultType="ReportItemsVo">
+    	SELECT * FROM REPORTITEMS
+		WHERE ITEM_ID = #{itemId} AND IF_DEL = 'N'
+    </select>
+  	
+</mapper>

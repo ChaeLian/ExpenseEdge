@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+  	<!-- 클래스 데이터베이스 열이름 A_COLUMN에서 카멜 표기법 이름(aColumn)으로 자동 매핑을 활성화(true) 함 -->
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+	</settings>
+     
+    <!-- dogs.xml에서 사용하는 namespace를 포함한 모든 곳에 별칭으로 사용할 수 있도록 함 -->
+ 	<typeAliases>
+ 		<typeAlias type="me.ExpenseEdge.Member.MemberVo" alias="MemberVo"/>
+ 		<typeAlias type="me.ExpenseEdge.Report.ReportVo" alias="ReportVo"/>
+ 		<typeAlias type="me.ExpenseEdge.Category.CategoryVo" alias="CategoryVo"/>
+ 		<typeAlias type="me.ExpenseEdge.Cost.CostVo" alias="CostVo"/>
+ 		<typeAlias type="me.ExpenseEdge.ReportItems.ReportItemsVo" alias="ReportItemsVo"/>
+ 		<typeAlias type="me.ExpenseEdge.Receipt.ReceiptVo" alias="ReceiptVo"/>
+	</typeAliases>
+  	
+  	<!-- MyBatis에게 구성한 SQL문을 어디에서 찾을 수 있는 지 알려주어야 함. JAVA는 자동 검색 수단을 제공해주지 않기 때문에  Classpath/resources경로에 알려주는 파일(mybatis-config.xml)을 넣어준다. -->
+  	<mappers>
+		<mapper resource="mybatis/member.xml"/>
+		<mapper resource="mybatis/report.xml"/>
+		<mapper resource="mybatis/category.xml"/>
+		<mapper resource="mybatis/cost.xml"/>
+		<mapper resource="mybatis/reportItems.xml"/>
+		<mapper resource="mybatis/receipt.xml"/>
+  	</mappers>
+</configuration>

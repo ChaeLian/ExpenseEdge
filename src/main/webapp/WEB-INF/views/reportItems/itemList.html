@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>itemList</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        table{
+            overflow: hidden;
+        }
+        #start,#end{
+            font-weight: bold;
+            font-size: large;
+        }
+        .botomline{
+            border-bottom: 1px solid lightgrey;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 헤더 -->
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="ms-3">
+            <a class="navbar-brand" href="#">ExpenseEdge</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="mr-auto">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="#">소개</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">공지사항</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Q&A</a></li>
+                </ul>
+            </div>
+            <div class="ms-auto">
+                <ul class="navbar-nav me-3">
+                    <li class="nav-item" id="login-item">
+                        <a class="nav-link" href="login.jsp">로그인</a>
+                    </li>
+                    <li class="nav-item d-none" id="user-item">
+                        <a class="nav-link" href="#">마이페이지</a>
+                        <span class="navbar-text" id="username">사용자 이름</span>
+                        <a class="nav-link" href="#" onclick="logout()">로그아웃</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-md-6">
+            <h3 class="my-3">지출 예정 항목</h3>
+        </div>
+        <div class="col-md-6">
+            <div class="d-flex">
+                <div class="d-flex align-items-center botomline mx-4">
+                    <label for="start" class="form-label mt-2">Start</label>
+                    <input type="text" id="start" class="form-control-plaintext mx-3" readonly>
+                </div>
+                <div class="d-flex align-items-center botomline mx-4">
+                    <label for="end"  class="form-label mt-2">End</label>
+                    <input type="text" id="end" class="form-control-plaintext mx-3" readonly>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container my-3">
+    <table class="table text-center caption-top">
+        <thead>
+            <tr>
+                <th>순번</th>
+                <th>날짜</th>
+                <th>비용항목</th>
+                <th>상세항목</th>
+                <th>지출금액</th>
+                <th>환급액</th>
+                <th>영수증첨부</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>1</th>
+                <th>2024-7-1</th>
+                <th>국내출장</th>
+                <th>식사</th>
+                <th>12000</th>
+                <th>1000</th>
+                <th>O</th>
+            </tr>
+        </tbody>
+        <tfoot>
+            <caption>총 게시물 수 0 건</caption>
+        </tfoot>
+    </table>
+    <div class="row">
+        <div class="col-md-10">
+            <button type="button" class="btn btn-outline-dark">수정</button>
+        </div>
+        <div class="col-md-2 d-flex justify-content-end">
+            <button type="button" class="btn btn-outline-success">제출</button>
+        </div>
+    </div>
+</div>
+
+<!-- 푸터 -->
+<footer class="bg text-center pt-3">
+    <p>© 2024 비용 처리 웹사이트 | 이용 약관 | 개인정보 처리방침</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // 현재 날짜를 구함
+    var today = new Date();
+
+    // 현재 달의 첫째 날 (1일)
+    var startDay = new Date(today.getFullYear(), today.getMonth(), 1);
+    // 현재 달의 마지막 날
+    var endDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+    // 날짜를 yyyy-mm-dd 형식으로 변환하는 함수
+    var formatDate = (date) => {
+        let year = date.getFullYear();
+        let month = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1
+        let day = String(date.getDate()).padStart(2, '0');
+        let result = `${year}-${month}-${day}`;
+        return result;
+    };
+
+    // Start와 End input 요소에 날짜 값 넣기
+    document.getElementById('start').value = formatDate(startDay);
+    document.getElementById('end').value = formatDate(endDay);
+</script>
+</body>
+</html>

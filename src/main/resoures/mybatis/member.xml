@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<!-- sqlsessionFactory build 해야함. -->
+
+<mapper namespace="member">
+	
+ 	<select id="selectMemberList" resultType="MemberVo">
+  		SELECT * FROM MEMBER
+  		ORDER BY MEMBER_ID
+  	</select>
+  	
+  	<select id="selectMember" resultType="MemberVo">
+  		SELECT * FROM MEMBER
+		WHERE LOGIN_ID = #{loginId}
+  	</select>
+  	
+  	<update id="editMember">
+  		UPDATE MEMBER SET
+  				MEMBER_NAME = #{custName}
+  				,ADDRESS = #{addressId}
+  				,MEMBER_PHONE = #{custPhone}
+  				,EMAIL = 
+  				,LOGIN_ID = #{custLoginId}
+  				,LOGIN_PASSWORD = #{custLoginPassword}
+  				,CUST_AUTH = #{custAuth}
+  				,USE_AT_CUST = #{useAtCust}
+		WHERE LOGIN_ID = #{custLoginId}
+  	</update>
+  	
+  	<insert id="addMember">
+  		<selectKey keyProperty="custId" order="BEFORE" resultType="String">
+  			SELECT 'member_'||LPAD(MEMBER_SEQ.NEXTVAL, 5, '0') FROM DUAL
+  		</selectKey>
+  			INSERT INTO MEMBER(   
+	        	MEMBER_ID
+	            ,MEMBER_NAME
+	            ,ADDRESS
+	            ,MEMBER_PHONE
+	            ,EMAIL
+	            ,IF_ADMIN
+	            ,LOGIN_ID
+	            ,LOGIN_TYPE
+	            ,LOGIN_PASSWORD
+	            ,PASSWORD_HINT
+	            ,PASSWORD_CNSR
+	            ,IF_DEL
+	            ,ADD_AT
+	            ,DEPT_ID
+			) VALUES (
+				#{memberId}
+				,#{memberName}
+				,#{address}
+				,#{memberPhone}
+				,#{email}
+				,#{ifAdmin}
+				,#{loginId}
+				,#{loginType}
+				,#{loginPassword}
+				,#{passwordHint}
+				,#{passwordCnsr}
+				,'N'
+				,#{addAt}
+				,#{deptId}
+			)
+	</insert>
+	
+	<update id="deleteMember">
+		UPDATE MEMBER SET IF_DEL = 'Y'
+		WHERE MEMBER_ID = #{memberId}
+	</update>
+	
+	<select id="memberCnt" resultType="int">
+		SELECT COUNT(*) FROM MEMBER
+		WHERE CUST_LOGIN_ID = #{custLoginId}
+	</select>
+</mapper>

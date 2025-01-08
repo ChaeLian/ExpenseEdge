@@ -1,0 +1,44 @@
+@charset "UTF-8";
+.tab-container {
+    display: flex;
+    border-bottom: 1px solid #9f9d9d;
+    margin: 0;
+    overflow: hidden;
+}
+
+/* 각 탭 */
+.tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    border: 1px solid #9f9d9d;
+    border-bottom: none;
+    border-radius: 10px 10px 0 0;
+    margin: 0px;
+    font-weight: bold;
+    color: #9f9d9d;
+}
+
+/* 활성화된 탭 스타일 */
+.tab.active {
+    background-color: #fff;
+    border-bottom: 1px solid #fff;
+    color:#000;
+}
+
+.card-text>span{
+    font-weight: bold;
+}
+
+#start,#end{
+	font-weight: bold;
+	font-size: large;
+}
+
+.botomline{
+	border-bottom: 1px solid lightgrey;
+}
+
+.noDeco{
+	text-decoration: none;
+	list-style-type: none;
+}
