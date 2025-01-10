@@ -127,4 +127,12 @@ public class ReportItemsServiceImpl implements ReportItemsService {
 		int num = reportItemsDao.itemDel(itemId);
 		return num;
 	}
+	
+	//비용항목 수정
+	@Override
+	public int itemUpdate(ReportItemsVo reportItemsVo) {
+		int num = reportItemsDao.itemUpdate(reportItemsVo);
+		return num;
+	}
+
 }

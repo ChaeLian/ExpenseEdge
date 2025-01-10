@@ -25,6 +25,7 @@
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <li><a class="dropdown-item" href="#">마이페이지</a></li>
+                                <li><a href="/report/list"  class="dropdown-item noDeco">비용조회</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="/login/logout">로그아웃</a></li>
                             </ul>

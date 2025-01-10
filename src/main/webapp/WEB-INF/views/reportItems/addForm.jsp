@@ -93,7 +93,7 @@
 	                        <div class="mb-3 row">
 	                            <div class="col-md-6">
 	                                <label for="categoryBig" class="form-label"></label>
-	                                <select class="form-select" id="categoryBig" required>
+	                                <select class="form-select" id="categoryBig" onchange="categoryChage(event)" required>
 	                                    <option value="">카테고리 선택</option>
 	                                    <c:forEach var="category" items="${categoryList}">
 								            <option value="${category.categoryName}" data-id="${category.categoryId}">${category.categoryName}</option>
@@ -115,10 +115,17 @@
 	                            <label for="itemDesc" class="form-label">설명</label>
 	                            <input type="text" class="form-control" id="itemDesc" name="itemDesc" required>
 	                        </div>
-	                        <div class="mb-3">
+	                        <div class="mb-3" id="receiptImageDiv">
 	                            <label for="receiptImage" class="form-label">영수증 이미지 업로드</label>
-	                            <input type="file" class="form-control" id="receiptImage" name="upFile" accept="image/*" required>
+	                            <input type="file" class="form-control" id="receiptImage" name="upFile" accept="image/*">
 	                        </div>
+	                        <!-- 기존 파일 미리보기 및 수정, 삭제 -->
+						    <div class="mb-3" id="fileShowDiv" style="display: none">
+						        <label for="fileShow" class="form-label">현재 첨부파일</label>
+						        <a onclick="removeFile(event)">X</a>
+						        <span id="fileOrg"></span>				        
+						        <img class="form-control" id="fileShow" src="" alt="" width="100%">
+						    </div>
 	                    </form>
 	                </div>
 	            </div>

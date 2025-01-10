@@ -23,9 +23,9 @@
 	    </selectKey>
  	</insert>
  	
- 	<select id="receiptSelect">
+ 	<select id="receiptSelect" resultType="ReceiptVo">
  		SELECT * FROM RECEIPT
-		WHERE ATTACH_ID = #{attachId} AND IF_DEL = 'N';
+		WHERE ATTACH_ID = #{attachId} AND IF_DEL = 'N'
  	</select>
  	
  	<update id="attachDel">

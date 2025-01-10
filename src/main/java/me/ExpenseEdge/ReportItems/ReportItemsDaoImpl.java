@@ -39,6 +39,12 @@ public class ReportItemsDaoImpl implements ReportItemsDao {
 		return sql.selectOne("reportItems.itemSelect", itemId);
 	}
 	
+	//비용항목 수정
+	@Override
+	public int itemUpdate(ReportItemsVo reportItemsVo) {
+		return sql.update("reportItems.itemUpdate", reportItemsVo);
+	}
+	
 	
 	
 	

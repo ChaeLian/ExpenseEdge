@@ -17,5 +17,8 @@ public interface ReportItemsDao {
 	
 	//아이템 조회
 	ReportItemsVo itemSelect(String itemId);
+	
+	//비용항목 수정
+	int itemUpdate(ReportItemsVo reportItemsVo);
 
 }

@@ -14,37 +14,45 @@ var currentNumber = 1;
 reList();
 	
 //카테고리 변경
-itemForm.querySelector('#categoryBig').onchange = function(){
-	let categoryBig = this.options[this.selectedIndex];
+function categoryChage(event){
+	let categoryBig = event.target.options[event.target.selectedIndex];
 	let categoryId = categoryBig.dataset.id;
+
+	if (categoryId) {
+		costChage(categoryId);
+    }	
+}
+function costChage(categoryId, costName){
 	let categorySm = document.getElementById('categorySm');
-	
 	categorySm.innerHTML = '<option value="">서브 카테고리 선택</option>';
 	
-	if (categoryId) {
-        //서브 카테고리 목록
-        fetch('/costApi/costList/'+ categoryId, {
-        	method: 'POST',
-			headers: {'Accept' : 'application/json;charset=UTF-8'}
-        }).then(response => response.json())
-            .then(data => {
-                // 서버에서 받은 서브 카테고리 목록을 추가
-                data.forEach(function(item) {
-                    let option = document.createElement("option");
-                    option.value = item.costName;
-                    option.dataset.id = item.costId;
-                    option.textContent = item.costName;
-                    option.dataset.max = item.maxAmount;
-                    categorySm.appendChild(option);
-                    
-                    document.querySelector('#costId').value = item.costId;
-                    document.querySelector('#resultAmount').dataset.max = item.maxAmount;
-                });
-            })
-            .catch(error => {
-                console.error('카테고리 정렬 error:', error);
+	//서브 카테고리 목록
+    fetch('/costApi/costList/'+ categoryId, {
+    	method: 'POST',
+		headers: {'Accept' : 'application/json;charset=UTF-8'}
+    }).then(response => response.json())
+        .then(data => {
+            // 서버에서 받은 서브 카테고리 목록을 추가
+            data.forEach(function(item) {
+                let option = document.createElement("option");
+                option.value = item.costName;
+                option.dataset.id = item.costId;
+                option.textContent = item.costName;
+                option.dataset.max = item.maxAmount;
+                if(costName){
+                	if(item.costName === costName){
+                	option.selected = true                	
+                	}
+                }
+                categorySm.appendChild(option);
+                
+                document.querySelector('#costId').value = item.costId;
+                document.querySelector('#resultAmount').dataset.max = item.maxAmount;
             });
-    }	
+        })
+        .catch(error => {
+            console.error('카테고리 정렬 error:', error);
+        });
 }
 
 //모달 날짜 선택 input 수정
@@ -63,6 +71,9 @@ function reList(){
     .then(data => {
     	listCount = data.length;
     	console.log(listCount);
+    	
+    	//기존 추가된 내용 없애기
+    	itemList.innerHTML = '';
         
         // 받은 데이터를 반복하여 테이블에 행을 추가
         data.forEach((item, index) => {
@@ -144,6 +155,15 @@ function reList(){
 
 //항목 추가 취소
 function addCancel(){
+	let updateBtn = document.querySelector('#itemUpdate');
+	if(updateBtn !== null){
+		//버튼 원래 상태로
+	  	updateBtn.textContent = '추가';
+		updateBtn.id = 'itemAdd';
+		
+		document.querySelector('#fileShowDiv').style.display = 'none';
+		document.querySelector('#receiptImageDiv').style.display = 'block';
+	}
 	itemForm.reset();
 	modal.hide();
 	openModal.focus();
@@ -156,7 +176,7 @@ itemAdd.onclick = function(){
 	console.log(itemForm.querySelector('#befoDate').value);
 	document.querySelector('#resultAmount').value = amount - max;
 	
-	const form = new FormData(itemForm); //form 태그 내용을 FormData 형식으로 전달되도록 설정
+	let form = new FormData(itemForm); //form 태그 내용을 FormData 형식으로 전달되도록 설정
 
 	fetch('/reportItemsApi/add', {
 	  method: 'POST',
@@ -165,6 +185,7 @@ itemAdd.onclick = function(){
 	  .then(response => response.text())
 	  .then(data => {
 	    console.log('Response:', data);  // 서버에서 받은 응답 처리
+	    reList();
 	    addCancel();
 	  })
 	  .catch(error => {
@@ -183,11 +204,12 @@ function deleteBtn(event){
     	alert("삭제가 취소되었습니다.");
     	return;
     }else{
-    	fetch('/reportItemsApi/del' + itemId, {
+    	fetch('/reportItemsApi/del/' + itemId, {
 			method: 'GET'
 		}).then(response => response.text())
 		  .then(data => {
 		    alert("삭제가 되었습니다.");
+		    reList();
 		}).catch(error => {
 		    console.error('항목 추가 error:', error);
 		});
@@ -197,17 +219,16 @@ function deleteBtn(event){
 //항목 수정
 function updateBtn(enItemJson){
 	let item = JSON.parse(decodeURIComponent(enItemJson));
+	//저장 버튼을 수정버튼으로 변경
+	let itemAddModal = document.querySelector('#itemAdd');
+	itemAddModal.textContent = '수정';
+	itemAddModal.id = 'itemUpdate';
 	console.log('함수',item);
 	
     if( !confirm("수정하시겠습니까?") ){
     	alert("수정 요청이 취소되었습니다.");
     	return;
     }else{
-    	//저장 버튼을 수정버튼으로 변경
-    	let updateBtn = document.querySelector('#itemAdd');
-    	updateBtn.textContent = '수정';
-    	updateBtn.id = 'itemUpdate';
-    	
     	//전달받은 item 객체의 내용을 사용해서 모달 open
     	console.log(item);
 		let reportItems = item.reportItemsVo;
@@ -215,11 +236,14 @@ function updateBtn(enItemJson){
 		let receipt = item.receiptVo;
     	//모달 열기
 		modal.show();
+		//등록하는 태그 보이지 않기
+		document.querySelector('#receiptImageDiv').style.display = 'none';
+		document.querySelector('#fileShowDiv').style.display = 'block';
 		
 		//form에 내용 보이기
-		itemForm.costId = reportItems.costId;
-		itemForm.receiptId = reportItems.receiptId;
-		itemForm.resultAmount = reportItems.resultAmount;
+		itemForm.querySelector("[name='costId']").value = reportItems.costId;
+		itemForm.querySelector("[name='receiptId']").value = reportItems.receiptId;
+		itemForm.querySelector("[name='resultAmount']").value = reportItems.resultAmount;
 		
 		let timestamp = reportItems.itemDate;
 		// Date 객체로 변환
@@ -227,20 +251,56 @@ function updateBtn(enItemJson){
 		// 날짜를 yyyy-MM-dd 형식으로 변환
 		let formattedDate = date.toLocaleDateString('en-CA'); // en-CA는 yyyy-MM-dd 형식으로 반환됨
 
-		itemForm.befoDate = formattedDate;
+		itemForm.querySelector("[name='befoDate']").value = formattedDate;
 		
-		itemForm.categoryBig = cost.categoryName;
-		itemForm.categorySm = cost.costName;
-		itemForm.amount = reportItems.amount;
-		itemForm.itemDesc = reportItems.itemDesc;
-		//itemForm.receiptImage = receipt.
-    	
-    	//fetch('/reportItemsApi/update' + itemId, {
-		//	method: 'POST'
-		//}).then(response => response.json())
-		//  .then(data => {  
-		//}).catch(error => {
-		//    console.error('항목 추가 error:', error);
-		//});
+		let selectBig = itemForm.querySelector('#categoryBig');
+		selectBig.value = cost.categoryName;
+		selectBig.dataset.id = cost.categoryId;
+		
+		costChage(cost.categoryId, cost.costName);
+		
+		//let selectSm = itemForm.querySelector('#categorySm');
+		//selectSm.value = cost.costName;
+
+		itemForm.querySelector("[name='amount']").value = reportItems.amount;
+		itemForm.querySelector("[name='itemDesc']").value = reportItems.itemDesc;
+		
+		fetch('/reportItemsApi/previewShow/' + receipt.attachId, {
+				method: 'GET'
+			}).then(response => response.blob())
+			  .then(blob => {
+			  	console.log(blob);
+			  	let url = window.URL.createObjectURL(blob);
+			  	
+			  	// 이미지 태그에 설정
+	            let imgElement = document.getElementById("fileShow");
+	            imgElement.src = url;
+	            imgElement.alt = receipt.attachOrgName;
+	            document.querySelector('#fileOrg').textContent = receipt.attachOrgName;
+	            
+	            imgElement.onload = () => {
+				    window.URL.revokeObjectURL(url);
+				};
+				
+			}).catch(error => {
+				console.error('항목 추가 error:', error);
+			});	
+		
+		 document.querySelector('#itemUpdate').onclick = function(){
+			//let form = new FormData(itemForm);
+	    	
+	    	fetch('/reportItemsApi/update/' + reportItems.itemId, {
+				method: 'PATCH',
+		  		body: form,  // FormData는 자동으로 적절한 형식으로 전송됨
+			}).then(response => response.json())
+			  .then(data => {
+			  	alert("수정 되었습니다.");
+			  	addCancel();
+			    //목록불러오기
+			    reList();
+			}).catch(error => {
+				console.error('항목 추가 error:', error);
+			});		 
+		 }
 	}
 }

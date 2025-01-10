@@ -1,17 +1,18 @@
 @charset "UTF-8";
-.hero {
-    background-image: url('/image/cumputer.png'); /* Replace with your image path */
+.mainImage {
+    background-image: url('/image/computer-original.png'); /* Replace with your image path */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    height: 60vh;
+    height: 85vh;
     color: white;
-    text-align: center;
+    align-items: center;
+    text-align: left;
     padding: 80px 0;
 }
 
-.hero h1 {
-    margin-top: 10%;
+.mainImage h1 {
+    margin-top: 5%;
     font-size: 3rem;
     font-weight: bold;
     text-shadow: 
@@ -21,7 +22,7 @@
         -4px 4px 0 rgba(0, 0, 0, 0.8);
 }
 
-.hero p {
+.mainImage p {
     font-size: 1.2rem;
     margin-top: 10px;
     text-shadow: 
@@ -29,6 +30,15 @@
         -1px -1px 0 rgba(0, 0, 0, 0.8), 
         1px -1px 0 rgba(0, 0, 0, 0.8), 
         -1px 1px 0 rgba(0, 0, 0, 0.8);
+}
+
+.service-description{
+	font-family: 'Noto Sans KR', sans-serif;
+}
+
+.service-description h2{
+    font-weight: bold;
+    color: #091b27;
 }
 
 .service-icons {
@@ -65,10 +75,13 @@
     margin-top: 15px;
     text-align: center;
     margin: 0 20px;
+    font-weight: 500;
+    color: #091b27;
 }
 
 .service-item p {
-    /*text-align: justify;*/
+    line-height: 1.5;
+    color: #555555;
     margin: 0 20px;
 }
 
@@ -80,3 +93,33 @@
 	text-decoration: none;
 	list-style-type: none;
 }
+
+/* 폰트 스타일 수정 */
+.heading-text {
+    font-family: 'Noto Sans KR', sans-serif; /* 가독성 좋은 한국어 폰트 */
+    font-size: 36px;
+    font-weight: bold;
+    color: #FFFFFF; /* 글자를 밝게 강조 */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); /* 글자 테두리 그림자 효과 */
+}
+
+.subheading-text {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: #DDDDDD; /* 약간 연한 색상으로 부드럽게 */
+    line-height: 1.8; /* 줄 간격 조절 */
+}
+
+.link-text {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    color: #D2B48C;
+}
+
+.link-text:hover {
+    color: #A0522D;
+    text-decoration: underline;
+}
+

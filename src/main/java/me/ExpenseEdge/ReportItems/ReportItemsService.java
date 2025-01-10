@@ -1,5 +1,6 @@
 package me.ExpenseEdge.ReportItems;
 
+import java.io.File;
 import java.util.List;
 
 import me.ExpenseEdge.Cost.CostVo;
@@ -17,5 +18,7 @@ public interface ReportItemsService{
 	//아이템 삭제
 	int itemDel(String itemId);
 	
-
+	//비용항목 수정
+	int itemUpdate(ReportItemsVo reportItemsVo);
+	
 }

@@ -8,40 +8,23 @@
 <title>EXPENSEDGE</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.3/font/bootstrap-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/main.css"> 
 </head>
 <body>
 <jsp:include page="template/header.jsp"></jsp:include>
 
 	<!-- Hero Section -->
-    <section class="hero">
+    <section class="mainImage">
         <div class="container">
-            <h1>EXPENSEDGE</h1>
-            <p>간편한 비용 관리로 매일의 업무를 지원합니다.</p>
-        </div>
-    </section>
-
-    <!-- Service Icons Section -->
-    <section class="service-icons bg-light">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-3">
-                    <i class="bi bi-megaphone"></i>
-                    <p><a href="" class="noDeco">공지사항</a></p>
-                </div>
-                <div class="col-md-3">
-                    <i class="bi bi-file-earmark-text"></i>
-                    <p><a href="/reportItems/add" class="noDeco">비용신청</a></p>
-                </div>
-                <div class="col-md-3">
-                    <i class="bi bi-search"></i>
-                    <p><a href="/report/list"  class="noDeco">비용조회</a></p>
-                </div>
-                <div class="col-md-3">
-                    <i class="bi bi-headset"></i>
-                    <p><a href=""  class="noDeco">Q&A</a></p>
-                </div>
-            </div>
+            <h1 class="heading-text">EXPENSEDGE</h1>
+            <br/>
+            <p class="subheading-text">EXPENSEDGE는 효율적이고 직관적인 비용 관리 시스템을 통해,<br/>다양한 지출을 쉽게 추적하고 관리할 수 있도록 지원합니다.</p> 
+            <p class="subheading-text">비용 계산과 승인 절차를 단순화하여 더 나은 재무 관리를 실현하세요.</p>
+            <p class="subheading-text">간편한 비용 관리로 업무를 지원합니다.</p>
+            <br/>
+            <br/>
+            <p style="color: white;"><a href="/reportItems/add" class="noDeco link-text">비용신청</a></p>
         </div>
     </section>
 

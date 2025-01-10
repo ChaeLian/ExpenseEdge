@@ -89,5 +89,17 @@
     	SELECT * FROM REPORTITEMS
 		WHERE ITEM_ID = #{itemId} AND IF_DEL = 'N'
     </select>
+    
+    <update id="itemUpdate">
+    	UPDATE REPORTITEMS SET
+		    COST_ID = #{costId}
+		    ITEM_DESC = #{itemDesc}
+		    RESULT_AMOUNT = #{resultAmount}
+		    AMOUNT = #{amount}
+		    UPDATE_AT = #{updateAt}
+		    ATTACH_ID = #{attachId}
+		    ITEM_DATE = #{itemDate}
+		WHERE ITEM_ID = #{itemId} AND IF_DEL = 'N'
+    </update>
   	
 </mapper>
