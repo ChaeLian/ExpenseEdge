@@ -113,7 +113,7 @@
                             </div>
                             <div class="mb-3">
 	                            <label for="itemDesc" class="form-label">설명</label>
-	                            <input type="text" class="form-control" id="itemDesc" name="itemDesc" required>
+	                            <input type="text" class="form-control" id="itemDesc" name="itemDesc">
 	                        </div>
 	                        <div class="mb-3" id="receiptImageDiv">
 	                            <label for="receiptImage" class="form-label">영수증 이미지 업로드</label>
@@ -130,8 +130,9 @@
 	                </div>
 	            </div>
 	            <div class="modal-footer">
-	                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="addCancel()">취소</button>
+	                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="cancelBtn()">취소</button>
 	              	<button type="button" class="btn btn-primary" id="itemAdd">추가</button>
+	              	<button type="button" class="btn btn-primary" id="itemUpdate" style="display: none;">수정</button>
 	            </div>
 	        </div>
 	    </div>

@@ -32,19 +32,31 @@
  	</insert>
  	
  	<select id="itemList" resultMap="reportItemResultMap">
- 		SELECT DISTINCT I.*
-				,C.COST_ID AS COST_ID_C
-				,C.COST_NAME
-				,C.MAX_AMOUNT
-				,C.CATEGORY_ID
-				,C.CATEGORY_NAME
-				,R.ATTACH_ID AS ATTACH_ID_R
-				,R.ATTACH_ORG_NAME
-				,R.ATTACH_NEW_NAME
+ 		SELECT 
+		    DISTINCT I.*
+		    ,C.COST_ID AS COST_ID_C
+		    ,C.COST_NAME
+		    ,C.MAX_AMOUNT
+		    ,C.CATEGORY_ID
+		    ,C.CATEGORY_NAME
+		    ,R.ATTACH_ID AS ATTACH_ID_R
+		    ,R.ATTACH_ORG_NAME
+		    ,R.ATTACH_NEW_NAME
 		FROM REPORTITEMS I 
-			JOIN (SELECT COST.*, CATEGORY.CATEGORY_NAME FROM COST JOIN CATEGORY ON COST.CATEGORY_ID = CATEGORY.CATEGORY_ID) C ON I.COST_ID = C.COST_ID
-			JOIN RECEIPT R ON R.ATTACH_ID = I.ATTACH_ID
-			WHERE I.REPORT_ID = #{reportId} AND I.IF_DEL = 'N'
+		    JOIN (SELECT 
+		                COST.*
+		                ,CATEGORY.CATEGORY_NAME 
+		            FROM COST JOIN CATEGORY ON COST.CATEGORY_ID = CATEGORY.CATEGORY_ID) 
+		        C ON I.COST_ID = C.COST_ID
+		    JOIN (SELECT 
+		                REPORTITEMS.*
+		                ,ATTACH_ORG_NAME
+		                ,ATTACH_NEW_NAME 
+		            FROM REPORTITEMS LEFT OUTER JOIN RECEIPT ON REPORTITEMS.ATTACH_ID = RECEIPT.ATTACH_ID 
+		            WHERE REPORTITEMS.IF_DEL = 'N') 
+		        R ON I.ITEM_ID = R.ITEM_ID
+		WHERE I.REPORT_ID = #{reportId} AND I.IF_DEL = 'N'
+		ORDER BY I.ITEM_DATE DESC, C.CATEGORY_ID
  	</select>
  	
  	<resultMap id="reportItemResultMap" type="me.ExpenseEdge.ReportItems.reportItemsDTO.ReportItemsDTO">

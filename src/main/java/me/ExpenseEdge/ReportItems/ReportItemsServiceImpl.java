@@ -81,6 +81,8 @@ public class ReportItemsServiceImpl implements ReportItemsService {
 				e.printStackTrace();
 				throw new RuntimeException(e); //첨부파일 저장중 오류발생시 롤백되도록
 			}
+		}else {
+			reportItemsVo.setAttachId("attach_null");
 		}
 
 		//보고서 중복이 있는지 확인, 없으면 생성

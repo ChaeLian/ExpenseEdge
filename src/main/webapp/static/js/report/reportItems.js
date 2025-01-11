@@ -132,7 +132,7 @@ function reList(){
 
             //영수증첨부
             let receiptTd = document.createElement('td');
-            if(!reportItems.attachId){
+            if(reportItems.attachId === 'attach_null'){
 	            receiptTd.textContent = 'X';
 	        }else{
 	            receiptTd.textContent = 'O';
@@ -153,17 +153,14 @@ function reList(){
 
 }
 
-//항목 추가 취소
-function addCancel(){
-	let updateBtn = document.querySelector('#itemUpdate');
-	if(updateBtn !== null){
-		//버튼 원래 상태로
-	  	updateBtn.textContent = '추가';
-		updateBtn.id = 'itemAdd';
-		
-		document.querySelector('#fileShowDiv').style.display = 'none';
-		document.querySelector('#receiptImageDiv').style.display = 'block';
-	}
+//항목 취소
+function cancelBtn(){
+	document.querySelector('#itemUpdate').style.display = 'none';
+	document.querySelector('#itemAdd').style.display = 'block';
+	
+	document.querySelector('#fileShowDiv').style.display = 'none';
+	document.querySelector('#receiptImageDiv').style.display = 'block';
+	
 	itemForm.reset();
 	modal.hide();
 	openModal.focus();
@@ -186,12 +183,12 @@ itemAdd.onclick = function(){
 	  .then(data => {
 	    console.log('Response:', data);  // 서버에서 받은 응답 처리
 	    reList();
-	    addCancel();
+	    cancelBtn();
+	    alert('항목이 추가되었습니다!');
 	  })
 	  .catch(error => {
 	    console.error('항목 추가 error:', error);
-	  });
-	
+	});
 }
 
 //항목 삭제
@@ -219,11 +216,9 @@ function deleteBtn(event){
 //항목 수정
 function updateBtn(enItemJson){
 	let item = JSON.parse(decodeURIComponent(enItemJson));
-	//저장 버튼을 수정버튼으로 변경
-	let itemAddModal = document.querySelector('#itemAdd');
-	itemAddModal.textContent = '수정';
-	itemAddModal.id = 'itemUpdate';
-	console.log('함수',item);
+	//저장 버튼 숨기기
+	document.querySelector('#itemUpdate').style.display = 'block';
+	document.querySelector('#itemAdd').style.display = 'none';
 	
     if( !confirm("수정하시겠습니까?") ){
     	alert("수정 요청이 취소되었습니다.");
@@ -236,9 +231,6 @@ function updateBtn(enItemJson){
 		let receipt = item.receiptVo;
     	//모달 열기
 		modal.show();
-		//등록하는 태그 보이지 않기
-		document.querySelector('#receiptImageDiv').style.display = 'none';
-		document.querySelector('#fileShowDiv').style.display = 'block';
 		
 		//form에 내용 보이기
 		itemForm.querySelector("[name='costId']").value = reportItems.costId;
@@ -258,46 +250,51 @@ function updateBtn(enItemJson){
 		selectBig.dataset.id = cost.categoryId;
 		
 		costChage(cost.categoryId, cost.costName);
-		
-		//let selectSm = itemForm.querySelector('#categorySm');
-		//selectSm.value = cost.costName;
 
 		itemForm.querySelector("[name='amount']").value = reportItems.amount;
 		itemForm.querySelector("[name='itemDesc']").value = reportItems.itemDesc;
 		
-		fetch('/reportItemsApi/previewShow/' + receipt.attachId, {
-				method: 'GET'
-			}).then(response => response.blob())
-			  .then(blob => {
-			  	console.log(blob);
-			  	let url = window.URL.createObjectURL(blob);
-			  	
-			  	// 이미지 태그에 설정
-	            let imgElement = document.getElementById("fileShow");
-	            imgElement.src = url;
-	            imgElement.alt = receipt.attachOrgName;
-	            document.querySelector('#fileOrg').textContent = receipt.attachOrgName;
-	            
-	            imgElement.onload = () => {
-				    window.URL.revokeObjectURL(url);
-				};
-				
-			}).catch(error => {
-				console.error('항목 추가 error:', error);
+		//첨부파일이 있다면 미리보기 실행
+		if(receipt.attachId !== 'attach_null'){
+			//첨부파일이 있다면 미리보기 칸 block
+			document.querySelector('#receiptImageDiv').style.display = 'none';
+			document.querySelector('#fileShowDiv').style.display = 'block';
+		
+			fetch('/reportItemsApi/previewShow/' + receipt.attachId, {
+					method: 'GET'
+				}).then(response => response.blob())
+				  .then(blob => {
+				  	console.log(blob);
+				  	let url = window.URL.createObjectURL(blob);
+				  	
+				  	// 이미지 태그에 설정
+		            let imgElement = document.getElementById("fileShow");
+		            imgElement.src = url;
+		            imgElement.alt = receipt.attachOrgName;
+		            document.querySelector('#fileOrg').textContent = receipt.attachOrgName;
+		            
+		            imgElement.onload = () => {
+					    window.URL.revokeObjectURL(url);
+					};
+					
+				}).catch(error => {
+					console.error('항목 추가 error:', error);
 			});	
+		}
 		
 		 document.querySelector('#itemUpdate').onclick = function(){
-			//let form = new FormData(itemForm);
+			//form 내용 가져오기
+			let form = new FormData(itemForm);
 	    	
 	    	fetch('/reportItemsApi/update/' + reportItems.itemId, {
 				method: 'PATCH',
 		  		body: form,  // FormData는 자동으로 적절한 형식으로 전송됨
 			}).then(response => response.json())
 			  .then(data => {
-			  	alert("수정 되었습니다.");
-			  	addCancel();
 			    //목록불러오기
 			    reList();
+			  	cancelBtn();
+			  	alert("수정 되었습니다.");
 			}).catch(error => {
 				console.error('항목 추가 error:', error);
 			});		 

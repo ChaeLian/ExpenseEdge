@@ -103,7 +103,7 @@ public class ReportItemsApiController {
 	//첨부파일 미리보기
 	@GetMapping("/previewShow/{attachId}")
 	public void previewShow(@PathVariable("attachId") String attachId, HttpServletResponse resp) throws IOException {
-	    // 첨부파일 정보를 조회
+		// 첨부파일 정보를 조회
 	    ReceiptVo receiptVo = receiptService.receiptSelect(attachId);
 
 	    // 저장한 경로에서 파일 가져오기
